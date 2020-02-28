@@ -12,16 +12,31 @@ export const showCaptionTagForm = option => ({
   option
 });
 
-export const toggleIcon = () => ({
-  type: TOGGLE_ICON
-});
+export const toggleIcon = (index, arr, parentIndex) =>  {
+  let new_baba = [];
+  console.log(" this is index >> ", index);
+  for (let i = 0; i < arr.length; i++) {
+    if (i === index) {
+      new_baba.push(true);
+    } else {
+      new_baba.push(false);
+    }
+  }
+
+  return {
+    type: TOGGLE_ICON,
+    icons: new_baba,
+    setParams: [index, parentIndex]
+  }
+};
 
 
 export default function reducer(
   state = {
     isCaptionForm: false,
     setQuery: null,
-    isIcon: false,
+    setParams: [],
+    isIcon: [],
     isCaptionTagForm: false
   },
   action
@@ -30,7 +45,8 @@ export default function reducer(
     case SHOW_CAPTION_FORM:
       return {
         ...state,
-        isCaptionForm: action.option
+        isCaptionForm: action.option,
+        isCaptionTagForm: action.option
       };
     case SHOW_CAPTION_TAG_FORM:
       return {
@@ -41,7 +57,8 @@ export default function reducer(
     case TOGGLE_ICON:
       return {
         ...state,
-        isIcon: !state['isIcon']
+        isIcon: action.icons,
+        setParams: action.setParams
       };
     default:
       return state;

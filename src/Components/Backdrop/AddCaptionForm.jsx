@@ -16,7 +16,7 @@ const AddCaptionForm = props => {
   };
 
   return (
-    <div onClick={(e) => e.stopPropagation()} style={styles} className="p-4 mx-auto w-50">
+    <div onClick={(e) => e.stopPropagation()} style={styles} className="caption-form p-4 mx-auto">
       <form className="h-100" onSubmit={postCaptionHandler}>
         <div className="mb-5">
           <input

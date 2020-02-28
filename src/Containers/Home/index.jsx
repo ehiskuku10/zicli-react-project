@@ -3,7 +3,7 @@ import Header from "./Header";
 import Content from "./Content";
 import Backdrop from "../../Components/Backdrop";
 import { connect } from "react-redux";
-import { fetchAllCaptions } from "../../Reducers/ApiInteractions.jsx";
+import { displayAllCaptions } from "../../Reducers/ApiInteractions.jsx";
 import { getCaptions } from "../../EndPoints.jsx";
 import AddTagsToCaptionForm from "../../Components/Backdrop/AddTagsToCaptionForm";
 import AddCaptionForm from "../../Components/Backdrop/AddCaptionForm.jsx";
@@ -27,7 +27,7 @@ class Home extends Component {
           { id: 3, caption: "Something Sha" }
         ]
       // console.log(captions)
-      this.props.fetchCaptionsHandler(captions)
+      this.props.displayCaptionsHandler(captions)
     })
   }
 
@@ -74,7 +74,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchCaptionsHandler: (captions) => dispatch(fetchAllCaptions(captions))
+  displayCaptionsHandler: (captions) => dispatch(displayAllCaptions(captions))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

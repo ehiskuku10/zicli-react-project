@@ -15,10 +15,21 @@ const Backdrop = props => {
     left: 0
   };
 
-  return <div onClick={(e) => {
-    showCaptionFormHandler();
-  }} style={styles}>{props.children}</div>;
+  return (
+    <div
+      onClick={e => {
+        showCaptionFormHandler();
+      }}
+      style={styles}
+    >
+      {props.children}
+    </div>
+  );
 };
+
+// const mapStateToProps = state => ({
+//   hideModal: state.ApiInteractions.hideModal
+// });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   showCaptionFormHandler: (option = false) => dispatch(showCaptionForm(option))

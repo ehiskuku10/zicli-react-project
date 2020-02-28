@@ -13,14 +13,18 @@ const Card = props => {
   };
 
   return props.captions.map(item => (
-    <div style={styles} key={item.id} className="col-lg-2 p-2 text-center">
+    <div
+      style={styles}
+      key={item.id}
+      className="col-lg-2 col-md-3 col-sm-4 p-2 text-center"
+    >
       <div className="d-flex caption-card justify-content-center rounded-lg card p-2 m-1 align-middle h-100">
         <div>{`${item.caption} !`}</div>
         <div className="mt-3 tag-link-wrapper">
           <Link
-            onClick={(e) => {
-              e.preventDefault()
-              showCaptionTagFormHandler([true, item.id])
+            onClick={e => {
+              e.preventDefault();
+              showCaptionTagFormHandler([true, item.id]);
             }}
             className="tag-link"
           >
