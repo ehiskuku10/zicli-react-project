@@ -3,10 +3,9 @@ import Header from "./Header";
 import Content from "./Content";
 import Backdrop from "../../Components/Backdrop";
 import { connect } from "react-redux";
-import { displayAllCaptions } from "../../Reducers/ApiInteractions.jsx";
-import { getCaptions } from "../../EndPoints.jsx";
-import AddTagsToCaptionForm from "../../Components/Backdrop/AddTagsToCaptionForm";
+import { fetchAllCaptions } from "../../Reducers/ApiInteractions.jsx";
 import AddCaptionForm from "../../Components/Backdrop/AddCaptionForm.jsx";
+import AddTagsToCaptionForm from "../../Components/Backdrop/AddTagsToCaptionForm.jsx";
 
 class Home extends Component {
   constructor(props) {
@@ -18,17 +17,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    getCaptions().then(res => {
-      let captions = res.data
-        ? res.data.data.captions
-        : [
-          { id: 1, caption: "Something Sha" },
-          { id: 2, caption: "Something Sha" },
-          { id: 3, caption: "Something Sha" }
-        ]
-      // console.log(captions)
-      this.props.displayCaptionsHandler(captions)
-    })
+    this.props.fetchAllCaptionsHandler();
   }
 
   submit(e) {
@@ -37,7 +26,7 @@ class Home extends Component {
   }
 
   render() {
-    let { isCaptionForm, isCaptionTagForm, setQuery } = this.props
+    let { isCaptionForm, isCaptionTagForm, captions } = this.props;
     let bckdrp = (
       <div>
         {isCaptionForm ? (
@@ -49,7 +38,7 @@ class Home extends Component {
         )}
         {isCaptionTagForm ? (
           <Backdrop>
-            <AddTagsToCaptionForm SetQ={setQuery}/>
+            <AddTagsToCaptionForm />
           </Backdrop>
         ) : (
           ""
@@ -60,7 +49,7 @@ class Home extends Component {
       <div>
         {bckdrp}
         <Header />
-        <Content captions={this.props.captions} />
+        <Content captions={captions} />
       </div>
     );
   }
@@ -69,12 +58,11 @@ class Home extends Component {
 const mapStateToProps = state => ({
   isCaptionForm: state.Effects.isCaptionForm,
   isCaptionTagForm: state.Effects.isCaptionTagForm,
-  setQuery: state.Effects.setQuery,
-  captions: state.ApiInteractions.captions || []
+  captions: state.ApiInteractions.captions
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  displayCaptionsHandler: (captions) => dispatch(displayAllCaptions(captions))
+  fetchAllCaptionsHandler: () => dispatch(fetchAllCaptions())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,10 +1,19 @@
 import React from "react";
-import { showCaptionForm } from "../../Reducers/Effects.jsx";
+import {
+  hideBackDrop,
+  showCaptionForm,
+  showCaptionTagForm
+} from "../../Reducers/Effects.jsx";
 import { connect } from "react-redux";
 import Radium from "radium";
 
 const Backdrop = props => {
-  let { showCaptionFormHandler } = props;
+  let {
+    hideBackDrop,
+    hideBackDropHandler,
+    showCaptionFormHandler,
+    showCaptionTagFormHandler
+  } = props;
   const styles = {
     backgroundColor: "rgba(0,0,0,0.5)",
     position: "fixed",
@@ -12,13 +21,16 @@ const Backdrop = props => {
     height: "100vh",
     zIndex: "1000",
     top: 0,
-    left: 0
+    left: 0,
+    display: hideBackDrop ? "none" : "block"
   };
 
   return (
     <div
       onClick={e => {
-        showCaptionFormHandler();
+        hideBackDropHandler();
+        showCaptionFormHandler(false);
+        showCaptionTagFormHandler([false, ""]);
       }}
       style={styles}
     >
@@ -27,12 +39,14 @@ const Backdrop = props => {
   );
 };
 
-// const mapStateToProps = state => ({
-//   hideModal: state.ApiInteractions.hideModal
-// });
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  showCaptionFormHandler: (option = false) => dispatch(showCaptionForm(option))
+const mapStateToProps = state => ({
+  hideBackDrop: state.Effects.hideBackDrop
 });
 
-export default connect(null, mapDispatchToProps)(Radium(Backdrop));
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  hideBackDropHandler: (option = true) => dispatch(hideBackDrop(option)),
+  showCaptionFormHandler: option => dispatch(showCaptionForm(option)),
+  showCaptionTagFormHandler: option => dispatch(showCaptionTagForm(option))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Radium(Backdrop));

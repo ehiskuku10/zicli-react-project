@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import { addCaption } from "../../Reducers/ApiInteractions";
 
 const AddCaptionForm = props => {
-
-  let { postCaptionHandler } = props
+  let { postCaptionHandler } = props;
 
   const styles = {
     position: "relative",
@@ -16,7 +15,13 @@ const AddCaptionForm = props => {
   };
 
   return (
-    <div onClick={(e) => e.stopPropagation()} style={styles} className="caption-form p-4 mx-auto">
+    <div
+      onClick={e => {
+        e.stopPropagation();
+      }}
+      style={styles}
+      className="caption-form p-4 mx-auto"
+    >
       <form className="h-100" onSubmit={postCaptionHandler}>
         <div className="mb-5">
           <input
@@ -39,7 +44,7 @@ const AddCaptionForm = props => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  postCaptionHandler: (e) => dispatch(addCaption(e))
+  postCaptionHandler: e => dispatch(addCaption(e))
 });
 
 export default connect(null, mapDispatchToProps)(Radium(AddCaptionForm));

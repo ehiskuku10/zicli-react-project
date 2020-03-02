@@ -2,65 +2,51 @@ import * as ACTIONS from "./ActionConstants.jsx";
 import {
   addNewCaption,
   addTagToCaption,
-  getCaptions,
-  fetchTags
+  fetchTags,
+  getCaptions
 } from "../EndPoints.jsx";
-import { showCaptionForm } from "./Effects.jsx";
+import {
+  showCaptionForm,
+  hidePreloader,
+  showCaptionTagForm
+} from "./Effects.jsx";
 
-const {
-  ADD_CAPTION,
-  DISPLAY_CAPTIONS,
-  FETCH_TAGS,
-  FETCH_CAPTIONS,
-  NEW_TAG_TO_CAPTION
-} = ACTIONS;
+const { DISPLAY_CAPTIONS, NEW_TAG_TO_CAPTION, DISPLAY_TAGS } = ACTIONS;
 
-export const addCaption = e => dispatch => {
+export const addCaption = e => async dispatch => {
   e.preventDefault();
-  let captions = [];
+  dispatch(showCaptionForm(false));
+  dispatch(hidePreloader(false));
 
   let value = e.target.caption.value;
-  addNewCaption(value).then(response => {
-    if (response.data) {
-      captions = response.data.data.captions;
-    } else {
-      console.log("Failed");
-    }
-  });
-  dispatch(showCaptionForm(false));
-  dispatch(fetchCaptions());
-  return {
-    type: ADD_CAPTION,
-    captions
-  };
+  let response = await addNewCaption(value);
+  if (response.data) {
+    console.log(response.data);
+    dispatch(hidePreloader(true));
+    dispatch(fetchAllCaptions());
+  } else {
+    console.log("Failed");
+  }
 };
 
-export const fetchCaptions = e => dispatch => {
-  let captions = [];
-  getCaptions().then(response => {
-    if (response.data) {
-      captions = response.data.data.captions;
-    } else {
-      console.log("Failed");
-    }
-  });
-  console.log(captions)
-  return {
-    type: FETCH_CAPTIONS,
-    captions
-  };
-};
+export const addNewTagToCaption = setParams => async dispatch => {
+  dispatch(showCaptionTagForm([false, ""]));
+  dispatch(hidePreloader(false));
 
-export const addNewTagToCaption = setParams => dispatch => {
   let [index, parentIndex] = setParams;
-  addTagToCaption(index, parentIndex).then(response => {
-    console.log(response);
-  });
+  let response = await addTagToCaption(index, parentIndex);
+  if (response.data) {
+    console.log(response.data);
+    dispatch(hidePreloader(true));
+    dispatch(fetchAllCaptions());
+  } else {
+    console.log("Failed");
+  }
 
   return {
     type: NEW_TAG_TO_CAPTION,
     option: true
-  }
+  };
 };
 
 export const displayAllCaptions = captions => {
@@ -70,11 +56,44 @@ export const displayAllCaptions = captions => {
   };
 };
 
-export const fetchAllTags =  (tags) => {
+export const displayAllTags = tags => {
   return {
-    type: FETCH_TAGS,
-    tags                                                                                             
+    type: DISPLAY_TAGS,
+    tags
   };
+};
+
+export const fetchAllCaptions = () => async dispatch => {
+  let captions = [];
+  let response = await getCaptions();
+  if (response.data) {
+    captions = response.data.data.captions;
+    if (captions.length < 1) {
+      captions = [
+        { id: 1, caption: "Something Sha" },
+        { id: 2, caption: "Something Sha" },
+        { id: 3, caption: "Something Sha" }
+      ];
+    } else {
+      dispatch(hidePreloader(true));
+    }
+    console.log(captions);
+    dispatch(displayAllCaptions(captions));
+  }
+};
+
+export const fetchAllTags = () => async dispatch => {
+  let tags = [];
+  dispatch(hidePreloader(false));
+  let response = await fetchTags();
+  if (response.data) {
+    tags = response.data.data.tags;
+    console.log(tags);
+    dispatch(hidePreloader(true));
+    dispatch(displayAllTags(tags));
+  } else {
+    console.log("Something unexpected happened");
+  }
 };
 
 export default function reducer(
@@ -86,20 +105,10 @@ export default function reducer(
   action
 ) {
   switch (action.type) {
-    case ADD_CAPTION:
-      return {
-        ...state,
-        captions: action.captions
-      };
-    case FETCH_TAGS:
+    case DISPLAY_TAGS:
       return {
         ...state,
         tags: action.tags
-      };
-    case FETCH_CAPTIONS:
-      return {
-        ...state,
-        captions: action.captions
       };
     case DISPLAY_CAPTIONS:
       return {

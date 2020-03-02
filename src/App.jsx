@@ -7,11 +7,11 @@ import Tags from "./Containers/Tags";
 
 const App = () => {
   return (
-    <div>
-      <Redirect from="/" to={ROUTES.HOME} />
+    <Switch>
       <Route path={ROUTES.HOME} component={Home} />
       <Route path={ROUTES.TAGS} component={Tags} />
-    </div>
+      <Redirect from={ROUTES.INDEX} to={ROUTES.HOME} />
+    </Switch>
   );
 };
 

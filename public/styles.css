@@ -20,6 +20,11 @@ img {
   height: 100%;
 }
 
+ul {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
 input[type="text"] {
   border: none;
   outline: none;
@@ -76,7 +81,7 @@ a:hover {
   border-radius: 4px;
   width: 50px;
   border: 1px solid rgb(97, 97, 97);
-  padding: .5px 2px;
+  padding: 0.5px 2px;
   display: flex;
   align-items: center;
   position: absolute;
@@ -89,11 +94,41 @@ a:hover {
 .mobile-btn > div {
   border: 1px solid rgb(97, 97, 97);
   margin: 5px;
-  padding: .5px;
+  padding: 0.5px;
 }
 
 div.caption-form {
   width: 50%;
+}
+
+.tag-cap-text {
+  background-color: #fff;
+  position: fixed;
+  z-index: 2000;
+  padding: 20px 0;
+}
+
+.tag-header {
+  padding: .5rem 0;
+  font-size: 2rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(214, 214, 214);
+  margin: 1rem 1rem 2rem;
+}
+
+ul.d-flex > li {
+  padding-right: 1rem;
+  margin-left: 1rem;
+  color: rgb(119, 119, 119);
+  cursor: pointer;
+}
+
+ul.d-flex > li:hover {
+  color: #00bcd4;
+}
+
+ul.d-flex > li:nth-child(1) {
+  border-right: 1px solid rgb(119, 119, 119);
 }
 
 @media (max-width: 725px) {
@@ -104,7 +139,7 @@ div.caption-form {
 }
 
 @media (min-width: 725px) {
-   .mobile-btn {
+  .mobile-btn {
     display: none !important;
   }
 }
